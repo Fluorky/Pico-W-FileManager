@@ -26,7 +26,7 @@ This project provides a command-line interface to manage files on the Raspberry 
 
 To run this project, you'll need the following:
 
-- Python 3.x
+- Python 3.9 or higher
 - `ampy` - a command-line tool to interact with MicroPython boards
 
 You can install the required Python packages using the `requirements.txt` file included in this project.
