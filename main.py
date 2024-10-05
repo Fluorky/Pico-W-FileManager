@@ -1,12 +1,20 @@
 import subprocess
-import sys
-
-# Set port to /dev/tty.usbmodem14201
-PICO_PORT = '/dev/tty.usbmodem14101'
+import glob
 
 
-def list_files(port=PICO_PORT):
+def find_device():
+    """Find the first available Pico W device."""
+    devices = glob.glob('/dev/tty.usbmodem*')
+    if devices:
+        return devices[0]  # Return the first found device
+    else:
+        raise RuntimeError("No Pico W device found. Ensure it is connected.")
+
+
+def list_files(port=None):
     """List files on the Pico W"""
+    if port is None:
+        port = find_device()  # Find the device if not specified
     try:
         result = subprocess.run(['ampy', '--port', port, 'ls'], capture_output=True, text=True)
         if result.returncode == 0:
@@ -18,8 +26,10 @@ def list_files(port=PICO_PORT):
         print(f"Failed to list files: {e}")
 
 
-def upload_file(local_file, remote_file=None, port=PICO_PORT):
+def upload_file(local_file, remote_file=None, port=None):
     """Upload a file to the Pico W"""
+    if port is None:
+        port = find_device()  # Find the device if not specified
     if not remote_file:
         remote_file = local_file
     try:
@@ -31,9 +41,10 @@ def upload_file(local_file, remote_file=None, port=PICO_PORT):
     except Exception as e:
         print(f"Failed to upload file: {e}")
 
-
-def download_file(remote_file, local_file=None, port=PICO_PORT):
+def download_file(remote_file, local_file=None, port=None):
     """Download a file from the Pico W"""
+    if port is None:
+        port = find_device()  # Find the device if not specified
     if not local_file:
         local_file = remote_file
     try:
@@ -45,9 +56,10 @@ def download_file(remote_file, local_file=None, port=PICO_PORT):
     except Exception as e:
         print(f"Failed to download file: {e}")
 
-
-def remove_file(remote_file, port=PICO_PORT):
+def remove_file(remote_file, port=None):
     """Remove a file from the Pico W"""
+    if port is None:
+        port = find_device()  # Find the device if not specified
     try:
         result = subprocess.run(['ampy', '--port', port, 'rm', remote_file], capture_output=True, text=True)
         if result.returncode == 0:
@@ -58,8 +70,10 @@ def remove_file(remote_file, port=PICO_PORT):
         print(f"Failed to remove file: {e}")
 
 
-def run_script(script, port=PICO_PORT):
+def run_script(script, port=None):
     """Run a Python script on the Pico W"""
+    if port is None:
+        port = find_device()  # Find the device if not specified
     try:
         result = subprocess.run(['ampy', '--port', port, 'run', script], capture_output=True, text=True)
         if result.returncode == 0:
@@ -70,36 +84,3 @@ def run_script(script, port=PICO_PORT):
             print("Error running script:", result.stderr)
     except Exception as e:
         print(f"Failed to run script: {e}")
-
-
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python pico_manager.py <command> [arguments]")
-        sys.exit(1)
-
-    command = sys.argv[1].lower()
-
-    if command == "ls":
-        list_files()
-    elif command == "put" and len(sys.argv) >= 3:
-        local_file = sys.argv[2]
-        remote_file = sys.argv[3] if len(sys.argv) > 3 else None
-        upload_file(local_file, remote_file)
-    elif command == "get" and len(sys.argv) >= 3:
-        remote_file = sys.argv[2]
-        local_file = sys.argv[3] if len(sys.argv) > 3 else None
-        download_file(remote_file, local_file)
-    elif command == "rm" and len(sys.argv) >= 3:
-        remote_file = sys.argv[2]
-        remove_file(remote_file)
-    elif command == "run" and len(sys.argv) >= 3:
-        script = sys.argv[2]
-        run_script(script)
-    else:
-        print("Invalid command or missing arguments")
-        print("Commands:")
-        print("  ls                       List files on Pico W")
-        print("  put <local> [remote]      Upload a file to Pico W")
-        print("  get <remote> [local]      Download a file from Pico W")
-        print("  rm <remote>               Remove a file from Pico W")
-        print("  run <script>              Run a Python script on Pico W")
