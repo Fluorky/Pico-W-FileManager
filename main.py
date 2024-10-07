@@ -2,6 +2,7 @@ import subprocess
 import sys
 import glob
 
+
 def find_device():
     """Find the first available Pico W device"""
     devices = glob.glob('/dev/tty.usbmodem*')
@@ -10,8 +11,10 @@ def find_device():
     else:
         raise RuntimeError("No Pico W device found. Ensure it is connected.")
 
+
 # Set port to dynamically found device
 PICO_PORT = find_device()
+
 
 def list_files(port=PICO_PORT):
     """List files on the Pico W"""
@@ -24,6 +27,7 @@ def list_files(port=PICO_PORT):
             print("Error listing files:", result.stderr)
     except Exception as e:
         print(f"Failed to list files: {e}")
+
 
 def upload_file(local_file, remote_file=None, port=PICO_PORT):
     """Upload a file to the Pico W"""
@@ -38,6 +42,7 @@ def upload_file(local_file, remote_file=None, port=PICO_PORT):
     except Exception as e:
         print(f"Failed to upload file: {e}")
 
+
 def download_file(remote_file, local_file=None, port=PICO_PORT):
     """Download a file from the Pico W"""
     if not local_file:
@@ -51,6 +56,7 @@ def download_file(remote_file, local_file=None, port=PICO_PORT):
     except Exception as e:
         print(f"Failed to download file: {e}")
 
+
 def remove_file(remote_file, port=PICO_PORT):
     """Remove a file from the Pico W"""
     try:
@@ -61,6 +67,7 @@ def remove_file(remote_file, port=PICO_PORT):
             print("Error removing file:", result.stderr)
     except Exception as e:
         print(f"Failed to remove file: {e}")
+
 
 def run_script(script, port=PICO_PORT):
     """Run a Python script on the Pico W"""
@@ -74,6 +81,7 @@ def run_script(script, port=PICO_PORT):
             print("Error running script:", result.stderr)
     except Exception as e:
         print(f"Failed to run script: {e}")
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -106,3 +114,4 @@ if __name__ == "__main__":
         print("  get <remote> [local]      Download a file from Pico W")
         print("  rm <remote>               Remove a file from Pico W")
         print("  run <script>              Run a Python script on Pico W")
+
