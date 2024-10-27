@@ -1,6 +1,10 @@
+import glob
+import logging
 import subprocess
 import sys
-import glob
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
 def find_device():
@@ -21,12 +25,11 @@ def list_files(port=PICO_PORT):
     try:
         result = subprocess.run(['ampy', '--port', port, 'ls'], capture_output=True, text=True)
         if result.returncode == 0:
-            print("Files on Pico W:")
-            print(result.stdout)
+            logging.info("Files on Pico W:\n%s", result.stdout)
         else:
-            print("Error listing files:", result.stderr)
+            logging.error("Error listing files: %s", result.stderr)
     except Exception as e:
-        print(f"Failed to list files: {e}")
+        logging.error("Failed to list files: %s", e)
 
 
 def upload_file(local_file, remote_file=None, port=PICO_PORT):
@@ -36,11 +39,11 @@ def upload_file(local_file, remote_file=None, port=PICO_PORT):
     try:
         result = subprocess.run(['ampy', '--port', port, 'put', local_file, remote_file], capture_output=True, text=True)
         if result.returncode == 0:
-            print(f"Successfully uploaded {local_file} to Pico W as {remote_file}")
+            logging.info("Successfully uploaded %s to Pico W as %s", local_file, remote_file)
         else:
-            print("Error uploading file:", result.stderr)
+            logging.error("Error uploading file: %s", result.stderr)
     except Exception as e:
-        print(f"Failed to upload file: {e}")
+        logging.error("Failed to upload file: %s", e)
 
 
 def download_file(remote_file, local_file=None, port=PICO_PORT):
@@ -50,11 +53,11 @@ def download_file(remote_file, local_file=None, port=PICO_PORT):
     try:
         result = subprocess.run(['ampy', '--port', port, 'get', remote_file, local_file], capture_output=True, text=True)
         if result.returncode == 0:
-            print(f"Successfully downloaded {remote_file} from Pico W as {local_file}")
+            logging.info("Successfully downloaded %s from Pico W as %s", remote_file, local_file)
         else:
-            print("Error downloading file:", result.stderr)
+            logging.error("Error downloading file: %s", result.stderr)
     except Exception as e:
-        print(f"Failed to download file: {e}")
+        logging.error("Failed to download file: %s", e)
 
 
 def remove_file(remote_file, port=PICO_PORT):
@@ -62,11 +65,11 @@ def remove_file(remote_file, port=PICO_PORT):
     try:
         result = subprocess.run(['ampy', '--port', port, 'rm', remote_file], capture_output=True, text=True)
         if result.returncode == 0:
-            print(f"Successfully removed {remote_file} from Pico W")
+            logging.info("Successfully removed %s from Pico W", remote_file)
         else:
-            print("Error removing file:", result.stderr)
+            logging.error("Error removing file: %s", result.stderr)
     except Exception as e:
-        print(f"Failed to remove file: {e}")
+        logging.error("Failed to remove file: %s", e)
 
 
 def run_script(script, port=PICO_PORT):
@@ -74,18 +77,17 @@ def run_script(script, port=PICO_PORT):
     try:
         result = subprocess.run(['ampy', '--port', port, 'run', script], capture_output=True, text=True)
         if result.returncode == 0:
-            print(f"Successfully ran {script} on Pico W")
-            print("Output:")
-            print(result.stdout)
+            logging.info("Successfully ran %s on Pico W", script)
+            logging.info("Output:\n%s", result.stdout)
         else:
-            print("Error running script:", result.stderr)
+            logging.error("Error running script: %s", result.stderr)
     except Exception as e:
-        print(f"Failed to run script: {e}")
+        logging.error("Failed to run script: %s", e)
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python pico_manager.py <command> [arguments]")
+        logging.error("Usage: python pico_manager.py <command> [arguments]")
         sys.exit(1)
 
     command = sys.argv[1].lower()
@@ -107,11 +109,10 @@ if __name__ == "__main__":
         script = sys.argv[2]
         run_script(script)
     else:
-        print("Invalid command or missing arguments")
-        print("Commands:")
-        print("  ls                       List files on Pico W")
-        print("  put <local> [remote]      Upload a file to Pico W")
-        print("  get <remote> [local]      Download a file from Pico W")
-        print("  rm <remote>               Remove a file from Pico W")
-        print("  run <script>              Run a Python script on Pico W")
-
+        logging.error("Invalid command or missing arguments")
+        logging.info("Commands:")
+        logging.info("  ls                       List files on Pico W")
+        logging.info("  put <local> [remote]      Upload a file to Pico W")
+        logging.info("  get <remote> [local]      Download a file from Pico W")
+        logging.info("  rm <remote>               Remove a file from Pico W")
+        logging.info("  run <script>              Run a Python script on Pico W")
