@@ -88,6 +88,12 @@ def run_script(script, port=PICO_PORT):
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         logging.error("Usage: python pico_manager.py <command> [arguments]")
+        logging.info("Commands:")
+        logging.info("  ls                       List files on Pico W")
+        logging.info("  put <local> [remote]     Upload a file to Pico W")
+        logging.info("  get <remote> [local]     Download a file from Pico W")
+        logging.info("  rm <remote>              Remove a file from Pico W")
+        logging.info("  run <script>             Run a Python script on Pico W")
         sys.exit(1)
 
     command = sys.argv[1].lower()
