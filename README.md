@@ -1,6 +1,6 @@
 # **Pico W File Manager**
 
-A command-line tool to manage files on the **Raspberry Pi Pico W** using the `ampy` tool. It allows users to **list, upload, download, remove files**, and **run Python scripts** directly on the Pico W.
+A command-line tool to manage files on the **Raspberry Pi Pico W** or **Raspberry Pi Pico** using the `ampy` tool. It allows users to **list, upload, download, remove files**, and **run Python scripts** directly on the Pico/Pico W.
 
 ## **Table of Contents**
 - [Features](#features)
@@ -12,10 +12,10 @@ A command-line tool to manage files on the **Raspberry Pi Pico W** using the `am
 ## **Features**
 - Automatically detects a connected **Pico W**  
 - List files on the device  
-- Upload files to the Pico W  
-- Download files from the Pico W  
-- Remove files from the Pico W  
-- Run Python scripts on the Pico W  
+- Upload files to the Pico/Pico W  
+- Download files from the Pico/Pico W  
+- Remove files from the Pico/Pico W  
+- Run Python scripts on the Pico/Pico W  
 
 ## **Requirements**
 Before using this tool, ensure you have the following installed:
