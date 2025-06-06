@@ -46,4 +46,4 @@ class PicoManagerCli:
         logging.info("  put <local> [remote]      Upload a file to Pico/Pico W")
         logging.info("  get <remote> [local]      Download a file from Pico/Pico W")
         logging.info("  rm <remote>               Remove a file from Pico/Pico W")
-        logging.info("  run <script>              Run a Python script on Pico/Pivo W")
+        logging.info("  run <script>              Run a Python script on Pico/Pico W")
